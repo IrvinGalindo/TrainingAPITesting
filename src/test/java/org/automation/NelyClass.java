@@ -1,2 +1,4 @@
-package org.automation;public class NelyClass {
+package org.automation;
+
+public class NelyClass {
 }
