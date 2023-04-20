@@ -1,4 +1,4 @@
 package org.automation;
 
-public class RosaNely g{
+public class RosaNely {
 }
