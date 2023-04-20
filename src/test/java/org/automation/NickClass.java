@@ -1,2 +1,4 @@
-package org.automation;public class NickClass {
+package org.automation;
+
+public class NickClass {
 }
