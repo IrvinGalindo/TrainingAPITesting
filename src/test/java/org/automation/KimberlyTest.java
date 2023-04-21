@@ -1,16 +1,14 @@
 package org.automation;
 
 import org.testng.annotations.Test;
+
 import static org.testng.Assert.assertTrue;
 
-
-
-public class AppTest {
-
+public class KimberlyTest {
     @Test
     public void shouldAnswerWithTrue() {
-        //Holiiiiii
         assertTrue(true);
-        //Hola
+
+        //Holi soy un comentario
     }
 }
