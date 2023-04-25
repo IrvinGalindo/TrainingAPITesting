@@ -15,7 +15,7 @@ import static org.testng.Assert.assertEquals;
 public class ClaudiaTest {
 
     @Test
-    public void shoulICreateMyFirstAutomation() {
+    public void shouldICreateMyFirstAutomation() {
         //User user = new User();
         RestAssured.baseURI = "https://reqres.in";
         RestAssured.basePath = "/api";
@@ -71,8 +71,7 @@ public class ClaudiaTest {
 
 
         //assertTrue(true);
-        //comentariospalabanda*/
-        //segundo comentario jhijh m UwU*/
+
 
     }
 
