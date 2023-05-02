@@ -7,10 +7,15 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import io.restassured.RestAssured;
 
+import java.util.HashMap;
+
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.testng.Assert.assertEquals;
 
 public class NickClass {
+
+    private final int USER_ID = 2;
 
     @BeforeClass
     public void setUPRestAssured(){
@@ -24,8 +29,7 @@ public class NickClass {
       //Hi
        // RestAssured.baseURI = "https://reqres.in";
        // RestAssured.basePath = "/api";
-        RestAssured
-                .given()
+        given()
                 .log().all()
                 .pathParam("userId", 2)
                 .when()
@@ -43,8 +47,7 @@ public class NickClass {
     public void shouldValidateUserWithTestNGAssertions(){
         //RestAssured.baseURI = "https://reqres.in";
         //RestAssured.basePath = "/api";
-        Response jsonPath = RestAssured
-                .given()
+        Response jsonPath = given()
                 .pathParam("userId", 2)
                 .when()
                 .get("/users/{userId}")
@@ -63,6 +66,26 @@ public class NickClass {
         assertEquals(actualFirstName, "Janet", "Name should be Janet");
         assertEquals(actualLastName, "Weaver", "Last Name should be Weaver");
         assertEquals(actualEmail, "janet.weaver@reqres.in", "Email should be Janet");
+
+    }
+
+    @Test
+    public void shouldValidateUserWithMap(){
+        HashMap user = new HashMap();
+        user.put("Id", USER_ID);
+        user.put("first_name", "Janet");
+        user.put("last_name", "Weaver");
+        user.put("email","janet.weaver@reqres.in");
+        user.put("avatar","https://reqres.in/img/faces/2-image.jpg");
+
+        given()
+                .log().all()
+                .pathParam("userId", USER_ID)
+                .when()
+                .get("/users/{userId}")
+                .then()
+                .log().all()
+                .body("data",is(user));
 
     }
 }
