@@ -1,6 +1,7 @@
 package org.automation;
 
 import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -10,8 +11,9 @@ import static org.hamcrest.Matchers.is;
 import static org.testng.Assert.assertEquals;
 
 public class getListUsers {
+
     @BeforeClass
-    public voic setUp() {
+    public void setUp() {
         RestAssured.baseURI = "https://reqres.in";
         RestAssured.basePath = "/api";
     }
@@ -22,34 +24,37 @@ public class getListUsers {
                 .given()
                 .queryParam("page", 2)
                 .when()
-                .get("/users?page={page}")
+                .get("/users")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .body("page", is(2))
-                .body("data.first_name", is("Janet", "Weaver"))
-                .body("data.email", is("janet.weaver@reqres.in"));
+                .body("data[0].first_name", is("Janet"))
+                .body("data[0].last_name", is("Weaver"))
+                .body("data[0].email", is("janet.weaver@reqres.in"));
     }
+
     @Test
     public void shouldValidateThatThePageIs212() {
-        RestAssured
+        int expectedUsersPerPage = 6;
+        int expectedTotalUsers = 12;
+        int expectedTotalPages = 2;
+
+        Response response = RestAssured
                 .given()
                 .queryParam("page", 2)
                 .when()
-                .get("/users?page={page}")
+                .get("/users")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .body("page", is(2))
                 .extract()
                 .response();
-        int actualUsersPerPage = jsonPath.getInt("per_page");
-        int actualTotalUsers = jsonPath.getInt("total");
-        int actualTotalPages = jsonPath.getInt("total_pages");
+
+        int actualUsersPerPage = response.jsonPath().getInt("per_page");
+        int actualTotalUsers = response.jsonPath().getInt("total");
+        int actualTotalPages = response.jsonPath().getInt("total_pages");
 
         assertEquals(expectedUsersPerPage, actualUsersPerPage);
         assertEquals(expectedTotalUsers, actualTotalUsers);
         assertEquals(expectedTotalPages, actualTotalPages);
-
     }
-
-}
 }
