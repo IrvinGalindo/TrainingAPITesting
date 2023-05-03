@@ -1,6 +1,7 @@
-package org.automation;
+package org.automation.Nicko;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.BeforeClass;
@@ -72,7 +73,7 @@ public class NickClass {
     @Test
     public void shouldValidateUserWithMap(){
         HashMap user = new HashMap();
-        user.put("Id", USER_ID);
+        user.put("id", USER_ID);
         user.put("first_name", "Janet");
         user.put("last_name", "Weaver");
         user.put("email","janet.weaver@reqres.in");
@@ -85,7 +86,28 @@ public class NickClass {
                 .get("/users/{userId}")
                 .then()
                 .log().all()
+                .statusCode(HttpStatus.SC_OK)
                 .body("data",is(user));
+
+    }
+
+    @Test
+    public void shouldStatusCodeBe400WhenUserNotExist() throws JsonProcessingException {
+        int nonExistedUserId = 900;
+
+         given()
+                .log().all()
+                .pathParam("userId", nonExistedUserId)
+                .when()
+                .get("/users/{userId}")
+                .then()
+                .statusCode( HttpStatus.SC_NOT_FOUND)
+                 .extract()
+                 .response();
+
+         //String jsonResponse = response.path(".").toString();
+         //assertEquals(jsonResponse, "{}", "response is not empty");
+
 
     }
 }
