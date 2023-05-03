@@ -48,6 +48,7 @@ public class ClaudiaTest {
                     .response();
 
 
+
             int actualUserId = jsonPath.path("data.id");
             String actualFirstName = jsonPath.path("data.first_name");
                     String actualLastName = jsonPath.path("data.last_name");
