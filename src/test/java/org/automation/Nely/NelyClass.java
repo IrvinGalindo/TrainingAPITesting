@@ -86,15 +86,15 @@ public class NelyClass {
                 .body("data",is(user));
 
     }
-/*
+
     @Test
-    public void shouldValidateUserPOJO(){
-        User expectedUser = new User();
+    public void shouldValidateUserWithPOJO(){
+        User actualUser = new User();
         //User expectedUser = new User(USER_ID, "Janet", "Weaver", "janet.weaver@reqres.in", "https://reqres.in/img/faces/2-image.jpg" )
 
 
         given()
-                .log().all()
+
                 .pathParam("userId", USER_ID)
                 .when()
                 .get("/users/{userId}")
