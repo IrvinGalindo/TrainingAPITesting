@@ -1,6 +1,6 @@
 package org.automation.Nely;
 
-import POJOs.User;
+//import POJOs.User;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
