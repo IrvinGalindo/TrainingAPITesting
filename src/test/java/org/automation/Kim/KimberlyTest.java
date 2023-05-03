@@ -1,5 +1,6 @@
-package org.automation;
+package org.automation.Kim;
 
+import POJOs.User;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
@@ -11,13 +12,17 @@ import org.testng.annotations.Test;
 import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.responseSpecification;
 import static org.hamcrest.Matchers.is;
 import static org.testng.Assert.assertEquals;
 
 public class KimberlyTest {
 
+    private final int USER_ID = 2;
+
+
     @BeforeClass
-    public void serUpRestAssured(){
+    public void setUpRestAssured(){
          RestAssured.baseURI = "https://reqres.in/";
          RestAssured.basePath = "/api";
     }
@@ -66,24 +71,43 @@ public class KimberlyTest {
         assertEquals(actualEmail, "janet.weaver@reqres.in","User email should be janet.weaver@reqres.in");
     }
 
-    @Test
-    public void shouldValidateUserWithMap(){
-        HashMap user = new HashMap();
-        user.put("first_name", "Janet");
-        user.put("last_name", "Weaver");
-        user.put("email", "janet.weaver@reqres.in");
-        user.put("avatar", "http://reqres.in/img/faces/2-image.jpg");
+    //@Test
+  /*  public void shouldValidateUserWithMap(){
+       int nonExistedUserId = 900;
+        // User expectedUser = new User();
+       // String value = objectMapper.writeValueAsString(expectedUser);
 
 
-        given()
+        Response jsonPath = given()
                 .log().all()
-                .pathParam("userId",2)
+                .pathParam("userId",USER_ID)
                 .when()
                 .get("/users/{userId}")
                 .then()
                 .log().all()
-                .body("data",is(user));
+                .extract()
+                .response();
 
+        String actualUser = jsonPath.path("data").toString();
+
+        assertEquals(actualUser, expectedUser, "Data not a user");
+
+    }*/
+
+    @Test
+    public void shouldStatusCodeBe400WhenUserNotExist() {
+        int nonExistingUser = 900;
+        Response response = given()
+                .pathParam("userId", nonExistingUser)
+                .when()
+                .get("/users/{userId}")
+                .then()
+                .statusCode(HttpStatus.SC_NOT_FOUND)
+                .extract()
+                .response();
+
+        String jsonResponse = response.path(".").toString();
+        assertEquals(jsonResponse,"{}","response is not empty");
 
     }
 
