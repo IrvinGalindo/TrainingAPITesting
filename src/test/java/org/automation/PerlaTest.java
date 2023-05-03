@@ -3,19 +3,31 @@ package org.automation;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.testng.Assert.assertEquals;
 
 public class PerlaTest {
+private final int USER_ID = 2;
+
+
+    @BeforeClass    //Method goes before every test or method.
+                    //Class foes before all the methods in the class.
+                    //Test goes before all the classes.
+    public void setUpRestAssured(){
+                    //User user = new User(); RestAssured doesn't need it.
+        RestAssured.baseURI ="https://reqres.in";
+        RestAssured.basePath ="/api";
+}
 
     @Test
     public void shouldICreateMyFirstAutomationTest(){
-        //User user = new User(); RestAssured doesn't need it.
-        RestAssured.baseURI = "https://reqres.in";
-        RestAssured.basePath = "/api";
-        RestAssured
-                .given()
+
+                given()
                 .pathParam("userId", 2)
                 .when()
                 .get("/users/{userId}")
@@ -29,14 +41,13 @@ public class PerlaTest {
     }
     @Test
     public void shouldValidateUserWithTestNgAssertions(){
-        RestAssured.baseURI = "https://reqres.in";
-        RestAssured.basePath = "/api";
-        Response jsonPath = RestAssured
-                .given()
+
+        Response jsonPath = given()
                 .pathParam("userId", 2)
                 .when()
                 .get("/users/{userId}")
                 .then()
+                .log().all()
                 .extract()
                 .response();
 
@@ -52,4 +63,21 @@ public class PerlaTest {
         assertEquals(actualLastName, "Weaver", "Last name should be Weaver");
         assertEquals(actualEmail, "janet.weaver@reqres.in", "Email should be janet.weaver@reqres.in");
     }
+@Test
+    public void shouldStatusCodeBe400WhenUserDoesNotExist(){
+       int nonExistingUser = 900;
+
+       Response response = given()
+               .pathParam("userId", nonExistingUser)
+               .when()
+               .get("users2{userId}")
+               .then()
+               .statusCode(HttpStatus.SC_NOT_FOUND)
+               .extract()
+               .response();
+
+       String jsonResponse = response.path(".").toString();
+       assertEquals(jsonResponse, "{}", "response is not empty");
+}
+
 }
