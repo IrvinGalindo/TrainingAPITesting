@@ -1,18 +1,40 @@
 package POJOs;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class User {
+
+    @JsonProperty(value = "id")
     private int id;
+
+    @JsonProperty("email")
     private String email;
-    private String first_name;
-    private String last_name;
+
+    @JsonProperty("first_name")
+    private String firstName;
+
+    @JsonProperty(value = "last_name")
+    private String lastName;
+
+    @JsonProperty(value = "avatar")
     private String avatar;
 
     public User() {
         id = 2;
         email = "janet.weaver@reqres.in";
-        first_name = "Janet";
-        last_name = "Weaver";
+        firstName = "Janet";
+        lastName = "Weaver";
         avatar = "https://reqres.in/img/faces/2-image.jpg";
+
+    }
+
+    public User(int id, String first_name, String last_name, String email, String avatar) {
+        super();
+        this.id = id;
+        this.firstName = first_name;
+        this.lastName = last_name;
+        this.email = email;
+        this.avatar = avatar;
     }
 
     public int getId() {
@@ -23,6 +45,7 @@ public class User {
         this.id = id;
     }
 
+
     public String getEmail() {
         return email;
     }
@@ -31,20 +54,20 @@ public class User {
         this.email = email;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getAvatar() {
@@ -53,6 +76,11 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{id=%d, email=%s, first_name=%s, last_name=%s, avatar=%s}", id, email, firstName, lastName, avatar);
     }
 
 }
