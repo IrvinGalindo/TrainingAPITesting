@@ -24,7 +24,6 @@ public class NelyClass {
         RestAssured.basePath = "/api";
 
     }
-
     @Test
     public void shouldICreateMyFirstAutomationTest() {
         //User user = new User();

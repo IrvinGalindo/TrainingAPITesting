@@ -34,7 +34,6 @@ public class CreateTest {
 
     }
 
-
     @Test
     public void userShouldBeCreatedAndJobIsReturned(){
         String expectedJob = "zion resident";
