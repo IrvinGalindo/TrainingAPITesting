@@ -1,6 +1,7 @@
 package org.automation.Nely;
 
 //import POJOs.User;
+import POJOs.User;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.testng.annotations.Test;
 import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.testng.Assert.assertEquals;
 
@@ -88,25 +90,41 @@ public class NelyClass {
     }
 
     @Test
-    public void shouldValidateUserWithPOJO(){
-        User actualUser = new User();
-        //User expectedUser = new User(USER_ID, "Janet", "Weaver", "janet.weaver@reqres.in", "https://reqres.in/img/faces/2-image.jpg" )
-
+    public void shouldValidateUserWithNestedPojo() {
+        User user = new User();
 
         given()
-
                 .pathParam("userId", USER_ID)
                 .when()
                 .get("/users/{userId}")
                 .then()
-                .log().all()
+                .statusCode(HttpStatus.SC_OK)
+                .body("data.id", equalTo(user.getId()))
+                .body("data.email", equalTo(user.getEmail()))
+                .body("data.first_name", equalTo(user.getFirstName()))
+                .body("data.last_name", equalTo(user.getLastName()))
+                .body("data.avatar", equalTo(user.getAvatar()));
+
+    }
+
+    @Test
+    public void shouldStatusCodeBe400WhenUserNotExist() {
+        int nonExistingUser = 900;
+
+        Response response = given()
+                .pathParam("userId", nonExistingUser)
+                .when()
+                .get("/users/{userId}")
+                .then()
+                .statusCode(HttpStatus.SC_NOT_FOUND)
                 .extract()
                 .response();
-        String actualUser = jsonPath.path("data").toString();
 
-        assertEquals(actualUser, expectedUser, "Data is not a user");
+        String jsonResponse = response.path(".").toString();
+        assertEquals(jsonResponse, "{}", "response is not empty");
 
-    }*/
-
-
+    }
 }
+
+
+
