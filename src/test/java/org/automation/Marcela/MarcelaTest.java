@@ -117,11 +117,11 @@ public class MarcelaTest {
 
     }
     @Test
-    public void shouldStatusCodeBe400WhenUserNotExist() throws JsonProcessingException {
+    public void shouldStatusCodeBe400WhenUserNotExist() {
         int nonExistedUser=900;
 
         Response response= given()
-                .pathParam("userId", 2)
+                .pathParam("userId", nonExistedUser)
                 .when()
                 .get("/users/{userId}")
                 .then()
