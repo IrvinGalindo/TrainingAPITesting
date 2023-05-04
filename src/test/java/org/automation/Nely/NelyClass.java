@@ -121,7 +121,6 @@ public class NelyClass {
 
         String jsonResponse = response.path(".").toString();
         assertEquals(jsonResponse, "{}", "response is not empty");
-
     }
 
 }
