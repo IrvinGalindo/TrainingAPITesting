@@ -34,6 +34,7 @@ public class CreateTest {
 
     }
 
+
     @Test
     public void userShouldBeCreatedAndJobIsReturned(){
         String expectedJob = "zion resident";
@@ -48,7 +49,6 @@ public class CreateTest {
                 .then()
                 .statusCode(HttpStatus.SC_CREATED)
                 .body("job", equalTo(expectedJob));
-
     }
 
 }
