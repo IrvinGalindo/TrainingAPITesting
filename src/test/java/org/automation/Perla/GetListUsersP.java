@@ -58,7 +58,7 @@ public class GetListUsersP {
         String expectedName = "Queso";
         given()
                 .contentType(ContentType.JSON)
-                .body("\n" +
+                .body("{\n" +
                         "\"name\": \"Queso\", \n" +
                         " \"job\": \"zion resident\"\n" +
                         "}")
@@ -66,21 +66,21 @@ public class GetListUsersP {
                 .post("/users")
                 .then()
                 .statusCode(HttpStatus.SC_CREATED)
-                .body("", equalTo(expectedName));
+                .body("name", equalTo(expectedName));
     }
     @Test
     public void userShouldBeCreatedAndJobIsReturned (){
         String expectedJob = "zion resident";
         given()
                 .contentType(ContentType.JSON)
-                .body("\n" +
+                .body("{\n" +
                         "\"name\": \"Queso\", \n" +
-                        " \"job\": \" "+ expectedJob + "\"\n" +
+                        " \"job\": \""+ expectedJob + "\"\n" +
                         "}")
                 .when()
                 .post("/users")
                 .then()
                 .statusCode(HttpStatus.SC_CREATED)
-                .body("", equalTo(expectedJob));
+                .body("job", equalTo(expectedJob));
     }
 }
