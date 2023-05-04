@@ -101,8 +101,8 @@ public class NelyClass {
                 .statusCode(HttpStatus.SC_OK)
                 .body("data.id", equalTo(user.getId()))
                 .body("data.email", equalTo(user.getEmail()))
-                .body("data.first_name", equalTo(user.getFirstName()))
-                .body("data.last_name", equalTo(user.getLastName()))
+                .body("data.first_name", equalTo(user.getFirst_name()))
+                .body("data.last_name", equalTo(user.getLast_name()))
                 .body("data.avatar", equalTo(user.getAvatar()));
 
     }
