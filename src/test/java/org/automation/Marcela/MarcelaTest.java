@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.testng.Assert.assertEquals;
 
@@ -78,6 +79,43 @@ public class MarcelaTest {
                 .body("data",is(user));
 
            }
+
+    @Test
+    public void shouldValidateUserWithPojo() {
+
+        User actualUser = given()
+                .pathParam("userId", 2)
+                .when()
+                .get("/users/{userId}")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .extract()
+                .jsonPath()
+                .getObject("data", User.class);
+
+        User expectedUser = new User();
+
+        assertEquals(actualUser.toString(), expectedUser.toString(), "users are not equals");
+
+    }
+
+    @Test
+    public void shouldValidateUserWithNestedPojo() {
+        User user = new User();
+
+        given()
+                .pathParam("userId", 2)
+                .when()
+                .get("/users/{userId}")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("data.id", equalTo(user.getId()))
+                .body("data.email", equalTo(user.getEmail()))
+                .body("data.first_name", equalTo(user.getFirstName()))
+                .body("data.last_name", equalTo(user.getLastName()))
+                .body("data.avatar", equalTo(user.getAvatar()));
+
+    }
     @Test
     public void shouldStatusCodeBe400WhenUserNotExist() throws JsonProcessingException {
         int nonExistedUser=900;
