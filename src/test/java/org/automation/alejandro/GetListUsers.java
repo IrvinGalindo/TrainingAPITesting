@@ -3,8 +3,10 @@ package org.automation.alejandro;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
