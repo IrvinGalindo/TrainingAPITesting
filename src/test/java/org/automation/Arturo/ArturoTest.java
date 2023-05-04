@@ -80,21 +80,20 @@ public class ArturoTest {
 
     @Test
     public void shouldValidateUserPOJO() {
-        User expectedUser = new User();
 
-        Response jsonPath = given()
-                .log().all()
-                .pathParam("userId",USER_ID)
+        User actualUser = given()
+                .pathParam("userId", USER_ID)
                 .when()
                 .get("/users/{userId}")
                 .then()
-                .log().all()
+                .statusCode(HttpStatus.SC_OK)
                 .extract()
-                .response();
+                .jsonPath()
+                .getObject("data", User.class);
 
-        String actualUser = jsonPath.path("data").toString();
+        User expectedUser = new User();
 
-        assertEquals(actualUser,expectedUser,"Data is not a user");
+        assertEquals(actualUser.toString(), expectedUser.toString(), "users are not equals");
     }
 
     @Test
