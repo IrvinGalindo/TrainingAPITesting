@@ -1,5 +1,6 @@
-package org.automation;
+package org.automation.Perla;
 
+import POJOs.User;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
@@ -79,5 +80,20 @@ private final int USER_ID = 2;
        String jsonResponse = response.path(".").toString();
        assertEquals(jsonResponse, "{}", "response is not empty");
 }
+@Test
+    public void shouldValidateUserWithPOJO(){
+User actualUser = given()
+        .pathParam("userId", USER_ID)
+        .when()
+        .get("/users/{userdId}")
+        .then()
+        .statusCode(HttpStatus.SC_OK)
+        .extract()
+        .jsonPath()
+        .getObject("data",User.class);
 
+User expectedUser = new User();
+assertEquals(actualUser.toString(), expectedUser.toString(), "Users are not equal");
+
+}
 }

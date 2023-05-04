@@ -1,6 +1,7 @@
-package org.automation;
+package org.automation.Perla;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.Argument;
 import org.apache.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.testng.Assert.assertEquals;
 
@@ -52,11 +54,33 @@ public class GetListUsersP {
 
     }
     @Test
-    public void shouldValidateNewUserCreation (){
+    public void userShouldBeCreatedAndNameIsReturned (){
+        String expectedName = "Queso";
         given()
+                .contentType(ContentType.JSON)
+                .body("\n" +
+                        "\"name\": \"Queso\", \n" +
+                        " \"job\": \"zion resident\"\n" +
+                        "}")
                 .when()
-                .body()
-                .
-                ;
+                .post("/users")
+                .then()
+                .statusCode(HttpStatus.SC_CREATED)
+                .body("", equalTo(expectedName));
+    }
+    @Test
+    public void userShouldBeCreatedAndJobIsReturned (){
+        String expectedJob = "zion resident";
+        given()
+                .contentType(ContentType.JSON)
+                .body("\n" +
+                        "\"name\": \"Queso\", \n" +
+                        " \"job\": \" "+ expectedJob + "\"\n" +
+                        "}")
+                .when()
+                .post("/users")
+                .then()
+                .statusCode(HttpStatus.SC_CREATED)
+                .body("", equalTo(expectedJob));
     }
 }
