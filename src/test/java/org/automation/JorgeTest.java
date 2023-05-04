@@ -6,12 +6,10 @@ import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.testng.Assert.assertEquals;
 
 
@@ -155,4 +153,19 @@ public class JorgeTest {
                     .body("name", equalTo(expectedName));
         }
     }
+    @Test
+    public void updateUserDetails() {
+        given()
+                .contentType("application/json")
+                .body("{\"name\":\"Morpheus\", \"job\":\"The One\"}")
+                .when()
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("name", equalTo("Morpheus"))
+                .body("job", equalTo("The One"))
+                .body("$", hasKey("updatedAt"));
+    }
+
+
+
 }
