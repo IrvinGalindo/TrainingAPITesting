@@ -1,11 +1,17 @@
 package org.automation.Kim;
 
+import POJOs.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -52,4 +58,15 @@ public class CreateNewUser {
                 .body("job", Matchers.equalTo(expectedJob));
 
     }
+
+    @Test
+    public void userShouldBeCreatedFromJson() throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        File requestBody = Paths.get("src/test/resources/Kimberly/CreateUser.json").toFile();
+        User use = objectMapper.readValue(requestBody, User.class);
+
+
+    }
+
 }
