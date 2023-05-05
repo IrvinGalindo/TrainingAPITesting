@@ -1,11 +1,18 @@
 package org.automation;
 
+import POJOs.CreateUser;
 import POJOs.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
@@ -166,6 +173,21 @@ public class JorgeTest {
                 .body("$", hasKey("updatedAt"));
     }
 
+    @Test
+    public void userShouldBeCreatedFromJson() throws IOException {
+ File requestBody = Paths.get("src/test/resources/Jorge/CreateUser.json").toFile();
+        ObjectMapper objectMapper = new ObjectMapper();
+        CreateUser user = objectMapper.readValue(requestBody, CreateUser.class);
+       // String expectedJob="zion resident";
+        given()
+                .contentType(ContentType.JSON)
+                .body(user)
+                .when()
+                .post("/users")
+                .then()
+                .statusCode(HttpStatus.SC_CREATED)
+                .body("job", equalTo(user.getJob()));
 
+    }
 
 }
