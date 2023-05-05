@@ -1,10 +1,16 @@
 package org.automation.Marcela;
 
+import POJOs.User;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.mapper.ObjectMapper;
+import io.restassured.mapper.ObjectMapperDeserializationContext;
+import io.restassured.mapper.ObjectMapperSerializationContext;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import java.io.File;
+import java.nio.file.Paths;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -47,5 +53,12 @@ public class CreateNewUser {
                 .then()
                 .statusCode(HttpStatus.SC_CREATED)
                 .body("job",equalTo(expectedJob));
+    }
+    @Test
+    public void userShouldBeCreatedFromJson(){
+        ObjectMapper objectMapper=new ObjectMapper();
+
+        File requestBody= Paths.get("src/test/resources/Marcela/CreateUser.json").toFile();
+        User user=objectMapper.readValue(requestBody,User.class);
     }
 }
