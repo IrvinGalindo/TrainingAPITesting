@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.testng.Assert.assertEquals;
 
@@ -178,7 +179,7 @@ public class JorgeTest {
  File requestBody = Paths.get("src/test/resources/Jorge/CreateUser.json").toFile();
         ObjectMapper objectMapper = new ObjectMapper();
         CreateUser user = objectMapper.readValue(requestBody, CreateUser.class);
-       // String expectedJob="zion resident";
+       String expectedJob="leader";
         given()
                 .contentType(ContentType.JSON)
                 .body(user)
@@ -187,6 +188,8 @@ public class JorgeTest {
                 .then()
                 .statusCode(HttpStatus.SC_CREATED)
                 .body("job", equalTo(user.getJob()));
+        String actualJob = user.getJob();
+        assertThat(actualJob, equalTo(expectedJob));
 
     }
 
