@@ -1,10 +1,16 @@
 package org.automation;
 
+import POJOs.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
 
@@ -44,6 +50,23 @@ public class CreateTest {
                             "\t\"job\" : \""+ expectedJob + "\"\n"+ // "\t\"job\" : \"zion resident\"\n" +
                             "\t\n" +
                             "}")
+                    .when()
+                    .post("/users")
+                    .then()
+                    .statusCode(HttpStatus.SC_CREATED)
+                    .body("job", equalTo(expectedJob));
+        }
+
+        @Test
+    public void userShouldBeCreatedFromJson () throws IOException {
+            ObjectMapper objectMapper = new ObjectMapper();
+            File requestBody = Paths.get("src/test/resources/Claudia/CreateUser.json").toFile();
+            User user = objectMapper.readValue(requestBody,User.class);
+
+            String expectedJob = "zion resident";
+            given()
+                    .contentType(ContentType.JSON) //Hay varios tipos de contentType, se despliegan al escribir el comando
+                    .body(user)
                     .when()
                     .post("/users")
                     .then()
