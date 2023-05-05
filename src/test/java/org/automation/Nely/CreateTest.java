@@ -1,10 +1,14 @@
 package org.automation.Nely;
 
+import POJOs.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -48,6 +52,15 @@ public class CreateTest {
                 .then()
                 .statusCode(HttpStatus.SC_CREATED)
                 .body("job", equalTo(expectedJob));
+    }
+
+    @Test
+    public void userShouldBeCreatedForJson(){
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        File requestBody = Paths.get("src/test/resources/Create/CreateUser.json").toFile();
+        User user = objectMapper.readValue(requestBody, User.class);
+                .
     }
 
 }
