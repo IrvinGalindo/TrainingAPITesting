@@ -1,18 +1,14 @@
 package org.automation.Kim;
 
-import POJOs.User;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 
-import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.responseSpecification;
 import static org.hamcrest.Matchers.is;
 import static org.testng.Assert.assertEquals;
 

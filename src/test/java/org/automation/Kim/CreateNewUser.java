@@ -1,7 +1,6 @@
 package org.automation.Kim;
 
 import POJOs.CreateUser;
-import POJOs.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -15,7 +14,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
 
 
 public class CreateNewUser {

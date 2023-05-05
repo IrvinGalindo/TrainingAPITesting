@@ -1,24 +1,20 @@
 package org.automation.Kim;
 
-import POJOs.CreateUser;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
+
 import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
-import static org.testng.Assert.assertEquals;
 
 public class UpdateUser {
+
 
     @BeforeClass
     public void setUp(){
@@ -27,23 +23,42 @@ public class UpdateUser {
     }
 
     @Test
-    public void userNameShouldBeUpdatedAndNameAndJobAreReturned(){
+    public void userNameShouldBeUpdated(){
         String updatedName = "Galletotota";
-        String expectedJob = "zion resident";
         given()
                 .contentType(ContentType.JSON)
+                .pathParam("userId", 2)
                 .body("{\n" +
                         "    \"name\": \"" + updatedName + "\",\n" +
                         "    \"job\": \"zion resident\"\n" +
                         "}")
                 .when()
-                .put("/users/2")
+                .put("/users/{userId}")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .body("name", Matchers.equalTo(updatedName))
-                .body("job", Matchers.equalTo(expectedJob));
+                .body("name", Matchers.equalTo(updatedName));
 
-        System.out.println(updatedName);
+
+
+    }
+
+    @Test
+    public void shouldValidateUserJobHasntBeenUpdated() {
+        String expectedName = "Galletotota";
+        String expectedJob = "zion resident";
+        given() //obtenemos nuevo resultado
+                .contentType(ContentType.JSON)
+                .pathParam("userId", 2)
+                .body("{\n" +
+                        "    \"name\": \"Galletotota\",\n" +
+                        "    \"job\": \"zion resident\"\n" +
+                        "}")
+                .when()
+                .put("/users/{userId}")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("name",is(expectedName))
+                .body("job",is(expectedJob));//El body despues del then tenemos acceso al body de la response
 
 
     }
