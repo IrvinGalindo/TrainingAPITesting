@@ -1,5 +1,6 @@
 package org.automation.Kim;
 
+import POJOs.CreateUser;
 import POJOs.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
@@ -32,7 +33,7 @@ public class CreateNewUser {
                 .contentType("application/json") //Tambipén se puede con librería que es ContentType.JASON
                 .body("{\n" +
                         "    \"name\": \"" + expectedName + "\",\n" +
-                        "    \"job\": \"leader\"\n" +
+                        "    \"job\": \"zion resident\"\n" +
                         "}")
                 .when()
                 .post("/users")
@@ -64,8 +65,20 @@ public class CreateNewUser {
         ObjectMapper objectMapper = new ObjectMapper();
 
         File requestBody = Paths.get("src/test/resources/Kimberly/CreateUser.json").toFile();
-        User use = objectMapper.readValue(requestBody, User.class);
+        CreateUser user = objectMapper.readValue(requestBody, CreateUser.class);
+        //Outra forma puede ser
+        //user.setName("Kimberly")
+        //user.setJob("CEO");
 
+        given()
+                .contentType(ContentType.JSON)
+                .body(user)
+                .when()
+                .post("/users")
+                .then()
+                .statusCode(HttpStatus.SC_CREATED)
+                .body("job", Matchers.equalTo(user.getName()))
+                .body("job", Matchers.equalTo(user.getJob()));
 
     }
 

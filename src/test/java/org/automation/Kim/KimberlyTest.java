@@ -28,7 +28,7 @@ public class KimberlyTest {
     }
 
     @Test
-    public void shouldAnswerWithTrue() {
+    public void shouldICreateMyFirstAutomationTest() {
      //   RestAssured.baseURI = "https://reqres.in/";
      //   RestAssured.basePath = "/api";
         // RestAssured tambi´pen se opuede quitar esto y solo importarlo en el given sin punto
