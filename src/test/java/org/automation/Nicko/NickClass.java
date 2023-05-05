@@ -1,16 +1,14 @@
 package org.automation.Nicko;
 
-
-import com.fasterxml.jackson.core.JsonProcessingException;
+import POJOs.User;
+import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import io.restassured.RestAssured;
-
 import java.util.HashMap;
-
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.testng.Assert.assertEquals;
 
@@ -23,7 +21,6 @@ public class NickClass {
         RestAssured.baseURI = "https://reqres.in";
         RestAssured.basePath = "/api";
     }
-
 
     @Test
     public void shouldICreateMyFirstAutomationTest() {
@@ -56,7 +53,6 @@ public class NickClass {
                 .extract()
                 .response();
 
-        //System.out.println(jsonpath.asPrettyString());
         int userId = jsonPath.path("data.id");
         String actualFirstName = jsonPath.path("data.first_name");
         String actualLastName = jsonPath.path ("data.last_name");
@@ -92,22 +88,57 @@ public class NickClass {
     }
 
     @Test
-    public void shouldStatusCodeBe400WhenUserNotExist() throws JsonProcessingException {
-        int nonExistedUserId = 900;
+    public void shouldValidateUserWithPojo() {
 
-         given()
-                .log().all()
-                .pathParam("userId", nonExistedUserId)
+        User actualUser = given()
+                .pathParam("userId", USER_ID)
                 .when()
                 .get("/users/{userId}")
                 .then()
-                .statusCode( HttpStatus.SC_NOT_FOUND)
-                 .extract()
-                 .response();
+                .statusCode(HttpStatus.SC_OK)
+                .extract()
+                .jsonPath()
+                .getObject("data", User.class);
 
-         //String jsonResponse = response.path(".").toString();
-         //assertEquals(jsonResponse, "{}", "response is not empty");
+        User expectedUser = new User();
 
+        assertEquals(actualUser.toString(), expectedUser.toString(), "users are not equals");
 
     }
+
+    @Test
+    public void shouldValidateUserWithNestedPojo() {
+        User user = new User();
+
+        given()
+                .pathParam("userId", USER_ID)
+                .when()
+                .get("/users/{userId}")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("data.id", equalTo(user.getId()))
+                .body("data.email", equalTo(user.getEmail()))
+                .body("data.first_name", equalTo(user.getFirstName()))
+                .body("data.last_name", equalTo(user.getLastName()))
+                .body("data.avatar", equalTo(user.getAvatar()));
+
+    }
+
+    @Test
+    public void shouldStatusCodeBe400WhenUserNotExist() {
+        int nonExistingUser = 900;
+
+        Response response = given()
+                .pathParam("userId", nonExistingUser)
+                .when()
+                .get("/users/{userId}")
+                .then()
+                .statusCode(HttpStatus.SC_NOT_FOUND)
+                .extract()
+                .response();
+
+        String jsonResponse = response.path(".").toString();
+        assertEquals(jsonResponse, "{}", "response is not empty");
+    }
+
 }

@@ -28,7 +28,7 @@ public class GetListUsers {
                 .statusCode(HttpStatus.SC_OK)
                .body("page" , is(2));
     }
-
+    @Test
     public void shouldValidateTotalUsersInPage2IS12(){
 
        Response jsonPath = given()
