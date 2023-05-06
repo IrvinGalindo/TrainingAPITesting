@@ -8,6 +8,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -161,6 +162,7 @@ public class JorgeTest {
                     .body("name", equalTo(expectedName));
         }
     }
+
     @Test
     public void updateUserDetails() {
         given()
@@ -176,10 +178,10 @@ public class JorgeTest {
 
     @Test
     public void userShouldBeCreatedFromJson() throws IOException {
- File requestBody = Paths.get("src/test/resources/Jorge/CreateUser.json").toFile();
+        File requestBody = Paths.get("src/test/resources/Jorge/CreateUser.json").toFile();
         ObjectMapper objectMapper = new ObjectMapper();
         CreateUser user = objectMapper.readValue(requestBody, CreateUser.class);
-       String expectedJob="leader";
+        String expectedJob = "leader";
         given()
                 .contentType(ContentType.JSON)
                 .body(user)
@@ -191,6 +193,20 @@ public class JorgeTest {
         String actualJob = user.getJob();
         assertThat(actualJob, equalTo(expectedJob));
 
+    }
+
+    @DataProvider
+    public Object[][] createUsers() {
+        Object[][] users = new Object[5][2];
+        users[0][0] = "Jorge";
+        users[0][1] = "CEO";
+        users[1][0] = "Antonio";
+        users[1][1] = "SDET";
+        users[2][0] = "Flores";
+        users[2][1] = "SDET";
+        users[3][0] = "JorgeFM";
+        users[3][1] = "JOB";
+        return users;
     }
 
 }
