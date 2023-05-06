@@ -1,11 +1,18 @@
 package org.automation.alejandro;
 
+import POJOs.CreateUser;
+import POJOs.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -50,6 +57,25 @@ public class CreateTest {
                 .body("job", equalTo(expectedJob));
     }
 
+    @Test
+    public void userShouldBeCreatedFromJson() throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
 
+        File requestBody = Paths.get("src/test/resources/Alejandro/CreateUser.json").toFile();
+        CreateUser user = objectMapper.readValue(requestBody, CreateUser.class);
+        user.setName("Alejandro");
+        user.setJob("CEO");
+
+
+        given().
+                contentType(ContentType.JSON)
+                .body(user)
+                .when()
+                .post("/users")
+                .then()
+                .statusCode(HttpStatus.SC_CREATED)
+                .body("name", equalTo(user.getName()))
+                .body("job", equalTo(user.getJob()));
+    }
 
 }
