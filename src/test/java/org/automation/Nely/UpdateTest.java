@@ -1,16 +1,19 @@
 package org.automation.Nely;
 
+import POJOs.CreateUser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.testng.Assert.assertEquals;
 
 public class UpdateTest {
     @BeforeClass
@@ -19,37 +22,23 @@ public class UpdateTest {
         RestAssured.basePath = "/api";
     }
     @Test
-    public void userShouldBeCreatedAndNameIsReturned(){
-        String expectedName = "morpheus";
+    public void userShouldBeUpdatedForJson() throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        File requestBody = Paths.get("src/test/resources/Nely/CreateUser.json").toFile();
+        CreateUser user = objectMapper.readValue(requestBody, CreateUser.class);
+        user.setJob("zion resident");
+
         given()
                 .contentType(ContentType.JSON)
-                .body("{\n" +
-                        "\"name\": \""+ expectedName + "\",\n" +
-                        "\"job\": \"zion resident\"\n" +
-                        "}"
-                )
+                .body(user)
                 .when()
-                .put("/users")
+                .patch("/users/2")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .body("name", equalTo(expectedName));
+                .body("name", equalTo(user.getName()))
+                .body("job", equalTo(user.getJob()));
 
-    }
-
-    @Test
-    public void userShouldBeCreatedAndJobIsReturned(){
-        String expectedJob = "zion resident";
-        given()
-                .contentType(ContentType.JSON)
-                .body("{\n" +
-                        "\"name\": \"Galletita\",\n" +
-                        "\"job\": \""+ expectedJob + "\"\n" +
-                        "}")
-                .when()
-                .put("/users")
-                .then()
-                .statusCode(HttpStatus.SC_OK)
-                .body("job", equalTo(expectedJob));
     }
 
 }
