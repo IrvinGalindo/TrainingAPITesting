@@ -32,7 +32,7 @@ public class UpdateUserPut {
                         "  \"job\":  \"zion resident\"\n" +
                         "}")
                 .when()
-                .post("/users")
+                .post("/users/2")
                 .then()
                 .statusCode(HttpStatus.SC_CREATED)
                 .body("name",equalTo(expectedName));
@@ -49,7 +49,7 @@ public class UpdateUserPut {
                         "  \"job\":  \""+expectedJob+"\"\n" +
                         "}")
                 .when()
-                .post("/users")
+                .post("/users/2")
                 .then()
                 .statusCode(HttpStatus.SC_CREATED)
                 .body("job",equalTo(expectedJob));
@@ -67,7 +67,7 @@ public class UpdateUserPut {
                 .contentType(ContentType.JSON)
                 .body(user)
                 .when()
-                .post("/users")
+                .post("/users/2")
                 .then()
                 .statusCode(HttpStatus.SC_CREATED)
                 .body("job",equalTo(user.getJob()))
