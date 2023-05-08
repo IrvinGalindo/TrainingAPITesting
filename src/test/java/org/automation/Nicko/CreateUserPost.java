@@ -36,7 +36,6 @@ public class CreateUserPost {
                 .then()
                 .statusCode(HttpStatus.SC_CREATED)
                 .body("name", equalTo(expectedName));
-
     }
 
     @Test

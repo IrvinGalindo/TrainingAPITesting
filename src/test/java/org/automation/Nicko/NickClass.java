@@ -98,7 +98,6 @@ public class NickClass {
                 .getObject("data", User.class);
 
         User expectedUser = new User();
-
         assertEquals(actualUser.toString(), expectedUser.toString(), "users are not equals");
 
     }

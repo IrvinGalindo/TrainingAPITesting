@@ -12,12 +12,10 @@ import org.testng.annotations.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 public class CreateTest {
-
     @BeforeClass
     public void setUp() {
         RestAssured.baseURI = "https://reqres.in";
@@ -60,7 +58,6 @@ public class CreateTest {
     public void userShouldBeCreatedFromJson(String name, String job) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        //File requestBody = Paths.get("src/test/resources/Nicko/CreateUser.json").toFile();
         File requestBody = Paths.get("src/test/resources/Nico/CreateUser.json").toFile();
         CreateUser user = objectMapper.readValue(requestBody, CreateUser.class);
 

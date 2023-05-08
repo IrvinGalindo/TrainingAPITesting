@@ -34,7 +34,7 @@ public class UpdateUser {
                 .body("job", equalTo(originalJob))
                 .log().all();
     }
-@Test
+    @Test
     public void nameUserShouldBeMatch(){
         String expectedName = "morpheus";
         given()
