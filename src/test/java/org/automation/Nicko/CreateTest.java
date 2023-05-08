@@ -17,7 +17,6 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 public class CreateTest {
-
     @BeforeClass
     public void setUp() {
         RestAssured.baseURI = "https://reqres.in";
