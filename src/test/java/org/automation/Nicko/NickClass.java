@@ -24,9 +24,6 @@ public class NickClass {
 
     @Test
     public void shouldICreateMyFirstAutomationTest() {
-      //Hi
-       // RestAssured.baseURI = "https://reqres.in";
-       // RestAssured.basePath = "/api";
         given()
                 .log().all()
                 .pathParam("userId", 2)
@@ -101,7 +98,6 @@ public class NickClass {
                 .getObject("data", User.class);
 
         User expectedUser = new User();
-
         assertEquals(actualUser.toString(), expectedUser.toString(), "users are not equals");
 
     }
