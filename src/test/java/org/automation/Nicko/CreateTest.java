@@ -1,4 +1,5 @@
 package org.automation.Nicko;
+
 import POJOs.CreateUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
@@ -59,6 +60,7 @@ public class CreateTest {
     public void userShouldBeCreatedFromJson(String name, String job) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
 
+        //File requestBody = Paths.get("src/test/resources/Nicko/CreateUser.json").toFile();
         File requestBody = Paths.get("src/test/resources/Nico/CreateUser.json").toFile();
         CreateUser user = objectMapper.readValue(requestBody, CreateUser.class);
 
@@ -91,6 +93,5 @@ public class CreateTest {
 
         return users;
     }
-
 
 }

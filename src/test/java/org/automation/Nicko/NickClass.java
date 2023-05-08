@@ -24,9 +24,6 @@ public class NickClass {
 
     @Test
     public void shouldICreateMyFirstAutomationTest() {
-      //Hi
-       // RestAssured.baseURI = "https://reqres.in";
-       // RestAssured.basePath = "/api";
         given()
                 .log().all()
                 .pathParam("userId", 2)
