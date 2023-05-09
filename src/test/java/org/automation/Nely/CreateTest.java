@@ -6,6 +6,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -22,6 +23,7 @@ public class CreateTest {
         RestAssured.baseURI = "https://reqres.in";
         RestAssured.basePath = "/api";
     }
+
     @Test
     public void userShouldBeCreatedAndNameIsReturned(){
         String expectedName = "Galletita";
@@ -37,7 +39,6 @@ public class CreateTest {
                 .then()
                 .statusCode(HttpStatus.SC_CREATED)
                 .body("name", equalTo(expectedName));
-
     }
 
     @Test
@@ -56,14 +57,15 @@ public class CreateTest {
                 .body("job", equalTo(expectedJob));
     }
 
-    @Test
-    public void userShouldBeCreatedForJson() throws IOException {
+    @Test(dataProvider = "createUsers")
+    public void userShouldBeCreatedFromJson(String name, String job) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
 
         File requestBody = Paths.get("src/test/resources/Nely/CreateUser.json").toFile();
         CreateUser user = objectMapper.readValue(requestBody, CreateUser.class);
-        user.setName("NELY");
-        user.setJob("CEO");
+
+        user.setName(name);
+        user.setJob(job);
 
         given()
                 .contentType(ContentType.JSON)
@@ -75,6 +77,21 @@ public class CreateTest {
                 .body("name", equalTo(user.getName()))
                 .body("job", equalTo(user.getJob()));
 
+    }
+   @DataProvider
+    public Object[][] createUsers(){
+        Object[][] users = new Object[5][2];
+
+        users[0][0] = "ROSA";
+        users[0][1] = "CEO";
+        users[1][0] = "NELY";
+        users[1][1] = "SDET";
+        users[2][0] = "HERRERA";
+        users[2][1] = "SDET";
+        users[3][0] = "Nely_hj";
+        users[3][1] = "Job_1";
+
+        return users;
     }
 
 }
