@@ -1,6 +1,9 @@
 package org.automation;
 
+import POJOs.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.restassured.RestAssured;
+import io.restassured.mapper.ObjectMapper;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.testng.annotations.BeforeClass;
@@ -15,6 +18,7 @@ import static org.testng.Assert.assertEquals;
 
 
 public class JaimeTest {
+    private ObjectMapper objectMapper = new ObjectMapper();
     private final int USER_ID = 2;
 
     @BeforeClass
@@ -82,6 +86,25 @@ public class JaimeTest {
                 .then()
                 .log().all()
              .body("data", is(User));
+
+
+    }
+
+    @Test(priority = 0)
+    public void shoulStatusCodeBe400WhenUserNotExist() throws JsonProcessingException {
+        int nonExistingUser =900;
+
+        Response response = given()
+                .pathParam( "userId", nonExistingUser)
+                .when()
+                .get( "/users/{userId}")
+                .then()
+                .statusCode(HttpStatus.SC_NOT_FOUND)
+                .extract()
+                .response();
+
+        String jsonResponse = response.path(",").toString();
+        assertEquals(jsonResponse, "{}", "response is not empty");
 
 
     }
