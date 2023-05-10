@@ -18,7 +18,7 @@ import static org.testng.Assert.assertEquals;
 
 
 public class JaimeTest {
-    private ObjectMapper objectMapper = new ObjectMapper();
+   private ObjectMapper objectMapper = new ObjectMapper();
     private final int USER_ID = 2;
 
     @BeforeClass
