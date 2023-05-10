@@ -3,23 +3,31 @@ package org.automation;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 
+import java.util.HashMap;
+
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.testng.Assert.assertEquals;
 
 
 public class JaimeTest {
+    private final int USER_ID = 2;
+
+    @BeforeClass
+    public void setUpRestAssured(){
+        RestAssured.baseURI = "https://reqres.in";
+        RestAssured.basePath = "/api";
+    }
     @Test
     public void shouldICreateMyFirstAutomationTest() {
         //User user = new User();
-        RestAssured.baseURI = "https://reqres.in";
-        RestAssured.basePath = "/api";
 
-        RestAssured
-                .given()
-                .pathParam( "userId", 2)
+            given()
+                .pathParam( "userId", USER_ID)
                 .when()
                 .get( "/users/{userId}")
                 .then()
@@ -34,34 +42,48 @@ public class JaimeTest {
     }
     @Test
     public void shouldValidateUserWithTestNgAssertions() {
-        RestAssured.baseURI = "https://reqres.in";
-        RestAssured.basePath = "/api";
-        Response jsonPath =   RestAssured
 
-                .given()
-                .pathParam( "userId", 2)
+        Response jsonPath = given()
+                .log().all()
+                .pathParam("userId", USER_ID)
                 .when()
-                .get( "/users/{userId}")
+                .get("/users/{userId}")
                 .then()
+                .log().all()
                 .extract()
                 .response();
 
-                int actualUserId = jsonPath.path("data.id");
-                String actualFirstName = jsonPath.path("data.first_name");
-                String actualLastName = jsonPath.path("data.last_name");
-                String actualEmail = jsonPath.path("data.email");
+        int actualUserId = jsonPath.path("data.id");
+        String actualFirstName = jsonPath.path("data.first_name");
+        String actualLastName = jsonPath.path("data.last_name");
+        String actualEmail = jsonPath.path("data.email");
 
-                assertEquals(jsonPath.statusCode(), HttpStatus.SC_OK, "Status should be 200");
-                assertEquals(actualUserId, 2, "User Id should be 2");
-                assertEquals(actualFirstName, "Janet", "name should be Janet");
-                assertEquals(actualLastName, "Weaver", "lastName should be Weaver");
-                assertEquals(actualEmail, "janet.weaver@reqres.in", "email should be janet.weaver@reqres.in");
+        assertEquals(jsonPath.statusCode(), HttpStatus.SC_OK, "Status should be 200");
+        assertEquals(actualUserId, USER_ID, "User Id should be 2");
+        assertEquals(actualFirstName, "Janet", "name should be Janet");
+        assertEquals(actualLastName, "Weaver", "lastName should be Weaver");
+        assertEquals(actualEmail, "janet.weaver@reqres.in", "email should be janet.weaver@reqres.in");
+    }
 
-        System.out.println(jsonPath.asPrettyString());
+    @Test
+    public void shouldValidateUserWithMap() {
+        HashMap User = new HashMap();
+        User.put ("id", USER_ID);
+        User.put ("first_name", "Janet");
+        User.put ("last_name", "Weaver");
+        User.put ("email", "janet.weaver@reqres.in");
+        User.put ("avatar", "https://reqres.in/img/faces/2-image.jpg");
 
+     given()
+                .log().all()
+                .pathParam( "userId", USER_ID)
+                .when()
+                .get( "/users/{userId}")
+                .then()
+                .log().all()
+             .body("data", is(User));
 
 
     }
-
 
 }
